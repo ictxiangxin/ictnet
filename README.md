@@ -1,4 +1,6 @@
-#ictnet - a python3 package for large network analysis
+#ictnet
+
+A python3 package for large network analysis.
 
 This package can use for analysis [Stanford Large Network Dataset Collection](http://snap.stanford.edu/data/index.html).
 
