@@ -3,8 +3,9 @@
 This package can use for analysis [Stanford Large Network Dataset Collection](http://snap.stanford.edu/data/index.html).
 
 ##Contents
-* Author
+* [Author](#Author)
 
 ###Author
 E-mail: ictxiangxin@gmail.com
+
 QQ: 405340537
