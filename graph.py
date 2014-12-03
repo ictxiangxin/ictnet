@@ -39,16 +39,14 @@ class Graph:
 
     def add_node(self, node_id):
         self.__node.add(node_id)
+        if node_id not in self.__link:
+            self.__link[node_id] = {}
 
     def add_edge(self, node_a, node_b, value=1):
         self.add_node(node_a)
         self.add_node(node_b)
-        if node_a not in self.__link:
-            self.__link[node_a] = {}
         self.__link[node_a][node_b] = value
         if not self.__direct:
-            if node_b not in self.__link:
-                self.__link[node_b] = {}
             self.__link[node_b][node_a] = value
 
     def del_node(self, node_id):
@@ -68,9 +66,15 @@ class Graph:
                 del self.__link[node_b]
 
     def node(self, node_id):
+        if node_id not in self.__node:
+            return None
         return self.__link[node_id]
 
     def edge(self, node_a, node_b):
+        if node_a not in self.__node:
+            return None
+        if node_b not in self.__link[node_a]:
+            return None
         return self.__link[node_a][node_b]
 
     def all_nodes(self):
