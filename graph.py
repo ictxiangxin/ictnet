@@ -92,13 +92,13 @@ class Graph:
     def del_edge(self, node_a, node_b):
         if node_a in self.__link:
             if node_b in self.__link[node_a]:
-                del self.__link[node_a]
+                del self.__link[node_a][node_b]
         if not self.__direct:
             if node_a in self.__link[node_b]:
-                del self.__link[node_b]
+                del self.__link[node_b][node_a]
 
     def node(self, node_id):
-        if node_id not in self.__node:
+        if node_id not in self.__link:
             return None
         return self.__link[node_id]
 
@@ -114,6 +114,15 @@ class Graph:
 
     def all_edges(self):
         return self.__link
+
+    def direct_graph(self):
+        return self.__direct
+
+    def sum_nodes(self):
+        return len(self.__node)
+
+    def sum_edges(self):
+        return sum([len(link) for _, link in self.__link.items()])
 
 
 def save(graph, filename):
