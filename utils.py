@@ -38,7 +38,17 @@ def separate_edge_sum(graph, edge_sum):
 def separate_edge_rate(graph, edge_rate):
     if not 0 < edge_rate < 1:
         return set()
-    edge_sum = int(sum([len(link) for _, link in graph.all_edges().items()]) * edge_rate)
+    edge_sum = int(graph.sum_edges() * edge_rate)
     if not graph.direct_graph():
         edge_sum /= 2
     return separate_edge_sum(graph, edge_sum)
+
+
+def evaluate(sep_set, test):
+    for node_tuple in test:
+        test.add((node_tuple[1], node_tuple[0]))
+    p = len(sep_set and test) / len(test)
+    r = len(sep_set and test) / len(sep_set)
+    if p + r == 0:
+        return 0
+    return 2 * p * r / (p + r)
