@@ -9,11 +9,14 @@ class Graph:
         self.__filename = filename
         self.__node = set()
         self.__link = {}
+        self.__label = False
 
-    def read(self):
-        if self.__filename is None:
+    def read(self, filename=None):
+        if filename is None:
+            filename = self.__filename
+        if filename is None:
             raise Exception("Need filename")
-        with open(self.__filename, "r") as fp:
+        with open(filename, "r") as fp:
             data = fp.read()
             if "\r\n" in data:
                 data_list = data.split("\r\n")
@@ -37,12 +40,41 @@ class Graph:
                         self.__link[int(node_tuple[1])] = {}
                     self.__link[int(node_tuple[1])][int(node_tuple[0])] = 1
 
+    def write(self, filename):
+        with open(filename, "w") as fp:
+            fp.write("# Nodes: %d\n" % len(self.__node))
+            fp.write("# Edges: %d\n" % sum([len(link) for _, link in self.__link.items()]))
+            for node_a in self.__node:
+                for node_b in self.__link[node_a]:
+                    if not self.__label:
+                        fp.write("%d\t%d\n" % (node_a, node_b))
+
+    def normalize(self):
+        mapping = {}
+        new_link = {}
+        new_node = set()
+        count = 0
+        for node_id in self.__node:
+            new_link[count] = self.__link[node_id]
+            mapping[node_id] = count
+            count += 1
+        for node_id in new_link:
+            new = {}
+            new_node.add(node_id)
+            for link_id in new_link[node_id]:
+                new[mapping[link_id]] = new_link[node_id][link_id]
+            new_link[node_id] = new
+        self.__node = new_node
+        self.__link = new_link
+
     def add_node(self, node_id):
         self.__node.add(node_id)
         if node_id not in self.__link:
             self.__link[node_id] = {}
 
     def add_edge(self, node_a, node_b, value=1):
+        if not self.__label:
+            value = 1
         self.add_node(node_a)
         self.add_node(node_b)
         self.__link[node_a][node_b] = value
