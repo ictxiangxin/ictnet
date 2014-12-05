@@ -44,11 +44,21 @@ def separate_edge_rate(graph, edge_rate):
     return separate_edge_sum(graph, edge_sum)
 
 
-def evaluate(sep_set, test):
-    for node_tuple in test:
+def evaluate(sep_set, test, quiet=False):
+    test_copy = test.copy()
+    for node_tuple in test_copy:
         test.add((node_tuple[1], node_tuple[0]))
-    p = len(sep_set and test) / len(test)
-    r = len(sep_set and test) / len(sep_set)
-    if p + r == 0:
-        return 0
-    return 2 * p * r / (p + r)
+    hit_sum = len(sep_set and test)
+    precision = hit_sum / len(test)
+    recall = hit_sum / len(sep_set)
+    if precision + recall == 0:
+        f1 = 0
+    else:
+        f1 = 2 * precision * recall / (precision + recall)
+    if not quiet:
+        print("Hit Sum: %d" % hit_sum)
+        print("Precision: %f" % precision)
+        print("Recall: %f" % recall)
+        print("F1: %f" % f1)
+    rst = {"Hit Sum": hit_sum, "Precision": precision, "Recall": recall, "F1": f1}
+    return rst
