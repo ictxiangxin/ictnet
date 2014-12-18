@@ -36,24 +36,23 @@ def separate_edge_sum(graph, edge_sum):
 
 
 def random_number(graph, out_file):
-    ofp = open(out_file, "w")
-    number = list(range(len(graph.all_nodes())))
-    nodes = graph.all_nodes()
-    mapping = {}
-    for node in nodes:
-        n = random.randint(0, len(number) - 1)
-        mapping[node] = number[n]
-        del number[n]
-    edges = graph.all_edges()
-    after = []
-    for a, link in edges.items():
-        for b in link:
-            after.append("%s\t%s\n" % (mapping[a], mapping[b]))
-    while len(after) != 0:
-        n = random.randint(0, len(after) - 1)
-        ofp.write(after[n])
-        del after[n]
-    ofp.close()
+    with open(out_file, "w") as ofp:
+        number = list(range(len(graph.all_nodes())))
+        nodes = graph.all_nodes()
+        mapping = {}
+        for node in nodes:
+            n = random.randint(0, len(number) - 1)
+            mapping[node] = number[n]
+            del number[n]
+        edges = graph.all_edges()
+        after = []
+        for a, link in edges.items():
+            for b in link:
+                after.append("%s\t%s\n" % (mapping[a], mapping[b]))
+        while len(after) != 0:
+            n = random.randint(0, len(after) - 1)
+            ofp.write(after[n])
+            del after[n]
 
 
 def separate_edge_rate(graph, edge_rate):
