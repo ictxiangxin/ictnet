@@ -122,7 +122,17 @@ class Graph:
         return len(self.__node)
 
     def sum_edges(self):
-        return sum([len(link) for _, link in self.__link.items()])
+        rst = sum([len(link) for _, link in self.__link.items()])
+        if not self.__direct:
+            return rst / 2
+        else:
+            return rst
+
+    def degree(self, node_id):
+        if node_id in self.__link:
+            return len(self.__link[node_id])
+        else:
+            return None
 
 
 def save(graph, filename):
